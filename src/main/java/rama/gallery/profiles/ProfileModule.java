@@ -112,7 +112,7 @@ public class ProfileModule implements RamaModule {
                                    Path.key("*username").multiPath(Path.key("userId").termVal("*userId"),
                                                                    Path.key("uuid").termVal("*uuid")))
                    // The ETL is currently partitioned by username, but now it needs to record information for a userId. This
-                   // hashPartition call relocated computation to the task which will be used to store information for this userId.
+                   // hashPartition call relocates computation to the task which will be used to store information for this userId.
                    // hashPartition always chooses the same task ID for the same user ID but evenly spreads different user IDs across
                    // all tasks. The code before and after this call can run on different processes on different machines, and Rama
                    // takes care of all serialization and network transfer required.

@@ -69,7 +69,7 @@ public class ProfileModule implements RamaModule {
                                                                           "heightInches", Integer.class)));
 
 
-    // ModuleUniqueIdPState is a small utility from rama-helpers that abstracts way the pattern of generating unique 64-bit IDs.
+    // ModuleUniqueIdPState is a small utility from rama-helpers that abstracts away the pattern of generating unique 64-bit IDs.
     // 64-bit IDs are preferable to UUIDs because they take half the space, but since they're smaller generating them randomly has
     // too high a chance of not being globally unique. ModuleUniqueIdPState uses a PState to track a task-specific counter, and it
     // combines that counter with the task ID to generate IDs that are globally unique.

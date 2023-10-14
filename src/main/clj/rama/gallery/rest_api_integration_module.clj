@@ -54,12 +54,12 @@
   ;; processing in ETLs.
   (declare-depot setup *get-depot (hash-by identity))
   ;; This declares a task global with the given value. Since AsyncHttpClientTaskGlobal implements the TaskGlobalObject
-  ;; interface, the value is specialized per task. Accessing the variable *http-kit in topologies always accesses the
+  ;; interface, the value is specialized per task. Accessing the variable *http-client in topologies always accesses the
   ;; value local to the task where the topology event is running.
-  (declare-object setup *http-kit (AsyncHttpClientTaskGlobal. nil))
+  (declare-object setup *http-client (AsyncHttpClientTaskGlobal. nil))
 
   ;; Stream topologies process appended data within a few milliseconds and guarantee all data will be fully processed.
-  (let [s (stream-topology topologies "s")]
+  (let [s (stream-topology topologies "get-http")]
     ;;   PStates are durable and replicated datastores and are represented as an arbitrary combination of data structures. Reads
     ;; and writes to PStates go to disk and are not purely in-memory operations.
     ;;   This PState stores the latest response for each URL, a map from a URL to the body of the HTTP response.
@@ -67,7 +67,7 @@
     ;; <<sources defines the ETL logic as Rama dataflow code. Rama's dataflow API works differently than Clojure, but it has
     ;; the same expressiveness as any general purpose language while also being able to seamlessly distribute computation.
     (<<sources s
-      ;; This subscribes the ETL to *registration-depot. The :> keyword separates the inputs and outputs of the form.
+      ;; This subscribes the ETL to *get-depot. The :> keyword separates the inputs and outputs of the form.
       ;; Because of the depot partitioner on *get-depot, computation starts on the same task where responses are
       ;; stored for that URL in the $$responses PState.
       (source> *get-depot :> *url)
@@ -75,7 +75,7 @@
       ;; the asynchronous task with the success/failure of the topology. So if the asynchronous work fails or times out,
       ;; the topology will fail as well and the depot record will be retried. completable-future> is a non-blocking operation.
       (completable-future>
-        (http-get-future (task-global-client *http-kit) *url)
+        (http-get-future (task-global-client *http-client) *url)
         :> *netty-response)
       (get-body *netty-response :> *body)
       ;; This records the latest response in the PState.

@@ -127,8 +127,7 @@ public class TimeSeriesModule implements RamaModule {
     //   This PState stores bucketed stats for all granularities for each URL. Minute/hour/day/month granularities use the
     // strings "m", "h", "d", and "td" as keys in that position of the data structure. The final map in the data structure
     // is subindexed because it can contain millions of elements. Subindexing stores each value of those maps individually
-    // and enables them to be written and queried efficiently. Subindexed maps are always sorted, and it's easy to do range
-    // queries on them. This is demonstrated in the query topology below.
+    // and enables them to be written and queried efficiently even when they're huge. Subindexed maps are always sorted, and it's //  also easy to do range queries on them. This is demonstrated in the query topology below.
     //   This PState is structured so that all granularities for a given URL are stored on the same partition. This allows queries
     // for large time ranges that need to fetch data from multiple granularities to be efficient by fetching all data from one
     // partition (as opposed to needing to fetch different granularities from different partitions). The query topology below

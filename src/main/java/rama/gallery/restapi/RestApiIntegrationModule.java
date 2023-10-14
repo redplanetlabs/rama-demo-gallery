@@ -14,7 +14,7 @@ import org.asynchttpclient.netty.NettyResponse;
  *
  * See the test class RestApiIntegrationModuleTest for how a client interacts with this module.
  */
-public class RestApiIntegrationModule implements RamaModule {
+public class RestAPIIntegrationModule implements RamaModule {
 
   //   This defines a "task global" object, which when used with declareObject (as shown below), creates a value that
   // can be referenced on all tasks in both ETLs and query topologies. This interface specializes the object on each

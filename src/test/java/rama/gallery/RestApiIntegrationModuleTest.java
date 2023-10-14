@@ -5,15 +5,15 @@ import org.junit.Test;
 import com.rpl.rama.*;
 import com.rpl.rama.test.*;
 
-import rama.gallery.restapi.RestApiIntegrationModule;
+import rama.gallery.restapi.RestAPIIntegrationModule;
 
-public class RestApiIntegrationModuleTest {
+public class RestAPIIntegrationModuleTest {
   @Test
   public void test() throws Exception {
     // InProcessCluster simulates a full Rama cluster in-process and is an ideal environment for experimentation and
     // unit-testing.
     try(InProcessCluster ipc = InProcessCluster.create()) {
-      RestApiIntegrationModule module = new RestApiIntegrationModule();
+      RestAPIIntegrationModule module = new RestAPIIntegrationModule();
       // By default a module's name is the same as its class name.
       String moduleName = module.getClass().getName();
       ipc.launchModule(module, new LaunchConfig(4, 2));

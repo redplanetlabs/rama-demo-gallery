@@ -31,9 +31,9 @@
 ;; PStates, and query topologies are defined via this entry point.
 (defmodule ProfileModule
   [setup topologies]
-   ;; This depot takes in Registration objects. The second argument is a "depot partitioner" that controls
-   ;; how appended data is partitioned across the depot, affecting on which task each piece of data begins
-   ;; processing in ETLs.
+  ;; This depot takes in Registration objects. The second argument is a "depot partitioner" that controls
+  ;; how appended data is partitioned across the depot, affecting on which task each piece of data begins
+  ;; processing in ETLs.
   (declare-depot setup *registration-depot (hash-by :username))
   ;; This depot takes in ProfileEdits objects.
   (declare-depot setup *profile-edits-depot (hash-by :user-id))
@@ -71,7 +71,7 @@
     (<<sources s
       ;;   This subscribes the ETL to *registration-depot. The :> keyword separates the inputs and outputs of the form. The output
       ;; here is destructured to capture the fields "uuid", "username", and "pwd-hash" to Rama variables of the same name.
-      ;;   Because of the depot partitioner on "*registrationDepot", computation starts on the same task where registration info
+      ;;   Because of the depot partitioner on *registrationDepot, computation starts on the same task where registration info
       ;; is stored for that username in the $$username->registration PState.
       (source> *registration-depot :> {:keys [*uuid *username *pwd-hash]})
       ;;   The first step of registration is to see if this username is already registered. So the current registration info

@@ -34,10 +34,7 @@
           alice-id (register! registration-depot username->registration "alice" "hash1")
           bob-id (register! registration-depot username->registration "bob" "hash2")]
       ;; verify registering alice again fails
-      (try
-        (register! registration-depot username->registration "alice", "hash3")
-        (catch Exception e))
-
+      (is (thrown? Exception (register! registration-depot username->registration "alice", "hash3")))
       ;; verify that profiles are initialized correctly
       (is (= "alice" (foreign-select-one (keypath alice-id :username) profiles)))
       (is (= "bob" (foreign-select-one (keypath bob-id :username) profiles)))
@@ -64,7 +61,7 @@
               :pwd-hash "hash4"}
              (foreign-select-one (keypath alice-id) profiles)))
 
-      ;; Do a single profile edit on a different user.            
+      ;; Do a single profile edit on a different user.
       (foreign-append! profile-edits-depot
                        (pm/->ProfileEdits bob-id
                                           [(pm/display-name-edit "Bobby")]))

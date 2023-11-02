@@ -80,7 +80,7 @@
       ;; no other ETL events, PState queries, or other events can run on the task. In this case, we know that any other
       ;; registration requests for the same username are queued behind this event, and there are no race conditions with
       ;; concurrent registrations because they are run serially on this task for this username.
-      (local-select> :username $$username->registration :> {*curr-uuid :uuid :as *curr-info})
+      (local-select> (keypath *username) $$username->registration :> {*curr-uuid :uuid :as *curr-info})
       ;; There are two cases where this is a valid registration:
       ;;  - *curr-info is null, meaning this is the first time a registration has been seen for this username
       ;;  - The UUID inside *curr-info matches the registration UUID. This indicates the registration request was retried,

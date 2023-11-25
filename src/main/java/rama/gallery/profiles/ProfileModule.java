@@ -119,7 +119,13 @@ public class ProfileModule implements RamaModule {
                    .hashPartition("*userId")
                    // Finally, this code records the username and pwdHash for the new user ID in the "$$profiles" PState.
                    .localTransform("$$profiles", Path.key("*userId").multiPath(Path.key("username").termVal("*username"),
-                                                                               Path.key("pwdHash").termVal("*pwdHash"))));
+                                                                               Path.key("pwdHash").termVal("*pwdHash")))
+                   // Stream topologies can return information back to depot append clients with "ack returns". The client
+                   // receives the resulting "ack return" for each subscribed colocated stream topology in a map from
+                   // topology name to value. Here, the ack return is used to let the client know the user ID for their
+                   // newly registered username. If the ack return is null, then the client knows the username registration
+                   // failed.
+                   .ackReturn("*userId"));
 
     // This subscribes the ETL to "*profileEditsDepot", binding all edit objects to the variable "*data". The depot partitioner in
     // this case ensures that processing starts on the task where we're storing information for the user ID.

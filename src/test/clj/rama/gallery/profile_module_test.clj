@@ -6,16 +6,14 @@
    [com.rpl.rama.test :as rtest]
    [rama.gallery.profile-module :as pm]))
 
-;; This function implements username registration, throwing an exception if the username is already registered. It uses
-;; the registration UUID to determine if the registration was a success.
+;; This function implements username registration, throwing an exception if the username is already registered.
+;; This uses the ack return of the "profiles" topology to know if the registration request succeeded or not.
 (defn register! [registration-depot username->registration username pwd-hash]
-  (let [reg-uuid (str (java.util.UUID/randomUUID))
-        ;; This depot append blocks until all colocated stream topologies have finished processing the data.
-        _ (foreign-append! registration-depot (pm/->Registration reg-uuid username pwd-hash))
-        ;; At this point, we're guaranteed the registration has been fully processed. Success/failure can then be determined
-        ;; by whether the ETL recorded this UUID in the $$username->registration PState.
-        {:keys [uuid user-id]} (foreign-select-one (keypath username) username->registration)]
-    (if (= reg-uuid uuid)
+  (let [{user-id "profiles"} (foreign-append! registration-depot
+                                              (pm/->Registration (str (java.util.UUID/randomUUID))
+                                              username
+                                              pwd-hash))]
+    (if (some? user-id)
       user-id
       (throw (ex-info "Username already registered" {})))))
 

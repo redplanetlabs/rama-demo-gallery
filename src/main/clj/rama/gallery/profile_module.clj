@@ -111,7 +111,13 @@
         (local-transform> [(keypath *user-id)
                            (multi-path [:username (termval *username)]
                                        [:pwd-hash (termval *pwd-hash)])]
-          $$profiles))
+          $$profiles)
+        ;; Stream topologies can return information back to depot append clients with "ack returns". The client
+        ;; receives the resulting "ack return" for each subscribed colocated stream topology in a map from
+        ;; topology name to value. Here, the ack return is used to let the client know the user ID for their
+        ;; newly registered username. If the ack return is nil, then the client knows the username registration
+        ;; failed.
+        (ack-return> *user-id))
 
       ;; This subscribes the ETL to *profile-edits-depot, binding all edit objects to the variable "*data". The depot
       ;; partitioner in this case ensures that processing starts on the task where we're storing information for the user ID.

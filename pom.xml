@@ -11,7 +11,7 @@
         <dependency>
             <groupId>com.rpl</groupId>
             <artifactId>rama</artifactId>
-            <version>0.10.0</version>
+            <version>0.11.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

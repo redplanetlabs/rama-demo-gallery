@@ -13,16 +13,14 @@ import static org.junit.Assert.*;
 
 
 public class ProfileModuleTest {
-  // This function implements username registration, throwing an exception if the username is already registered. It uses
-  // the registration UUID to determine if the registration was a success.
+  // This function implements username registration, throwing an exception if the username is already registered.
+  // This uses the ack return of the "profiles" topology to know if the registration request succeeded or not.
   public long register(Depot registrationDepot, PState usernameToRegistration, String username, String pwdHash) {
     String uuid = UUID.randomUUID().toString();
     // This depot append blocks until all colocated stream topologies have finished processing the data.
-    registrationDepot.append(new Registration(uuid, username, pwdHash));
-    // At this point, we're guaranteed the registration has been fully processed. Success/failure can then be determined
-    // by whether the ETL recorded this UUID in the "$$usernameToRegistration" PState.
-    Map info = usernameToRegistration.selectOne(Path.key(username));
-    if(uuid.equals(info.get("uuid"))) return (long) info.get("userId");
+    Map<String, Object> ackReturns = registrationDepot.append(new Registration(uuid, username, pwdHash));
+    Long userId = (Long) ackReturns.get("profiles");
+    if(userId != null) return userId;
     else throw new RuntimeException("Username already registered");
   }
 

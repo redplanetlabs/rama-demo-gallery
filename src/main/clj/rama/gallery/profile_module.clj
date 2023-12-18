@@ -119,8 +119,9 @@
         ;; failed.
         (ack-return> *user-id))
 
-      ;; This subscribes the ETL to *profile-edits-depot, binding all edit objects to the variable "*data". The depot
-      ;; partitioner in this case ensures that processing starts on the task where we're storing information for the user ID.
+      ;; This subscribes the ETL to *profile-edits-depot, destructuring the fields of edit objects to the variables
+      ;; *user-id and *edits. The depot partitioner in this case ensures that processing starts on the task where
+      ;; we're storing information for the user ID.
       (source> *profile-edits-depot :> {:keys [*user-id *edits]})
       ;; *edits is a list, and ops/explode emits one time for every element in that list. Each element is destructured to
       ;; the variables *field and *value.

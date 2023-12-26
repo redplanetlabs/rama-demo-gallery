@@ -17,14 +17,13 @@
           get-depot (foreign-depot ipc module-name "*get-depot")
           responses (foreign-pstate ipc module-name "$$responses")
 
-          url1 "https://official-joke-api.appspot.com/random_joke"
-          url2 "http://jservice.io/api/random"]
+          url "https://official-joke-api.appspot.com/random_joke"]
 
       ;; This checks the behavior of the module by appending a few URLs and printing the responses recorded in the
       ;; PState. To write a real test with actual assertions, it's best to test the behavior of the module with
       ;; the external REST API calls mocked out, such as by using with-redefs.
-      (foreign-append! get-depot url1)
-      (println "Response 1:" (foreign-select-one (keypath url1) responses))
-      (foreign-append! get-depot url2)
-      (println "Response 2:" (foreign-select-one (keypath url2) responses))
+      (foreign-append! get-depot url)
+      (println "Response 1:" (foreign-select-one (keypath url) responses))
+      (foreign-append! get-depot url)
+      (println "Response 2:" (foreign-select-one (keypath url) responses))
       )))

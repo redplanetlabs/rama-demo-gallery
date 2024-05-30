@@ -76,7 +76,7 @@
   (:> :h *hour-bucket)
   (:> :td *thirty-day-bucket))
 
-;; These constants are used in the helper function below "emitQueryGranularities".
+;; These constants are used in the helper function below "query-granularities".
 (def NEXT-GRANULARITY
   {:m :h
    :h :d

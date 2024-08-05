@@ -2,7 +2,8 @@
   (:use [com.rpl.rama]
         [com.rpl.rama.path])
   (:require [com.rpl.rama.aggs :as aggs]
-            [com.rpl.rama.ops :as ops])
+            [com.rpl.rama.ops :as ops]
+            [taoensso.nippy :as nippy])
   (:import [com.rpl.rama.integration TaskGlobalObject]
            [org.asynchttpclient AsyncHttpClient Dsl]
            [org.asynchttpclient.netty NettyResponse]))
@@ -38,6 +39,14 @@
     (.close client))
   FetchTaskGlobalClient
   (task-global-client [this] client))
+
+;; Rama uses Nippy for serialization, and it doesn't work properly for deftypes. So these
+;; calls tell Nippy how to serialize/deserialize the task global type.
+(nippy/extend-freeze AsyncHttpClientTaskGlobal ::async-http-client
+  [o data-output])
+
+(nippy/extend-thaw ::async-http-client [data-input]
+  (AsyncHttpClientTaskGlobal. nil))
 
 (defn http-get-future [^AsyncHttpClient client url]
   (-> client (.prepareGet url) .execute .toCompletableFuture))

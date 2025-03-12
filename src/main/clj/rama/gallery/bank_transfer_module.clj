@@ -9,7 +9,7 @@
 ;;   - A transfer only goes through if there are sufficient funds available.
 ;;   - No race conditions with concurrent transfers.
 ;;
-;; See the test file profile_modules_test.clj for how a client interacts with this module to initiate
+;; See the test file bank_transfer_module_test.clj for how a client interacts with this module to initiate
 ;; transfers and query for funds and transfer information.
 
 ;; As with all the demos, data is represented using plain Clojure records. You can represent

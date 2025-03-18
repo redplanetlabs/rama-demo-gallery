@@ -8,5 +8,5 @@
                               :url "https://nexus.redplanetlabs.com/repository/maven-public-releases"}]]
 
   :profiles {:dev {:resource-paths ["src/test/resources/"]}
-             :provided {:dependencies [[com.rpl/rama "0.22.0"]]}}
+             :provided {:dependencies [[com.rpl/rama "1.0.0"]]}}
   )

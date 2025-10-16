@@ -2,8 +2,8 @@
   :source-paths ["src/main/clj"]
   :test-paths ["src/test/clj"]
   :dependencies [[com.rpl/rama-helpers "0.10.0"]
-                 [org.apache.logging.log4j/log4j-slf4j18-impl "2.16.0"]
-                 [org.asynchttpclient/async-http-client "2.12.3"]]
+                 [org.asynchttpclient/async-http-client "2.12.3"
+                  :exclusions [org.slf4j/slf4j-api ch.qos.logback/logback-classic ch.qos.logback/logback-core]]]
   :repositories [["releases" {:id "maven-releases"
                               :url "https://nexus.redplanetlabs.com/repository/maven-public-releases"}]]
 
